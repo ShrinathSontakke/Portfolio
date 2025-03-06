@@ -1,101 +1,137 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Instagram, Linkedin, Moon, Sun } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { useState, useEffect } from 'react';
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import { Code2, Mail, Github, Linkedin, Moon, Sun } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import { useState, useEffect } from "react";
+import Lottie from "lottie-react";
+import Coding from "../assets/coding.json";
 
-const FloatingElement = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+const FloatingElement = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) => (
   <motion.div
     initial={{ y: 0 }}
-    animate={{ 
+    animate={{
       y: [0, -20, 0],
       transition: {
         duration: 4,
         repeat: Infinity,
         delay,
-        ease: "easeInOut"
-      }
+        ease: "easeInOut",
+      },
     }}
   >
     {children}
   </motion.div>
 );
+function MagneticButton({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
-function SocialLink({ href, icon: Icon, delay = 0 }: { href: string; icon: any; delay?: number }) {
-  const { theme } = useTheme();
-  
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(
+    mouseYSpring,
+    [-0.5, 0.5],
+    ["17.5deg", "-17.5deg"]
+  );
+  const rotateY = useTransform(
+    mouseXSpring,
+    [-0.5, 0.5],
+    ["-17.5deg", "17.5deg"]
+  );
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
-    <motion.a
-      href={href}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ delay, duration: 0.3 }}
-      whileHover={{ 
-        scale: 1.2,
-        boxShadow: theme === 'dark' 
-          ? '0 0 20px rgba(255,255,255,0.3)' 
-          : '0 0 20px rgba(0,0,0,0.2)'
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateY,
+        rotateX,
+        transformStyle: "preserve-3d",
       }}
-      className={`p-3 rounded-full flex items-center justify-center ${
-        theme === 'dark'
-          ? 'bg-white/10 hover:bg-white/20 text-white'
-          : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
-      } transition-all duration-300`}
+      className={className}
     >
-      <Icon className="w-5 h-5" />
-    </motion.a>
+      {children}
+    </motion.div>
   );
 }
 
-const BackgroundAnimation = () => (
-  <div className="absolute inset-0 overflow-hidden">
-    <svg
-      className="absolute w-full h-full"
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-    >
-      <motion.path
-        d="M0,0 L100,0 L100,100 L0,100 Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.2"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ 
-          pathLength: 1, 
-          opacity: 0.2,
-          transition: { duration: 2, repeat: Infinity }
-        }}
-        className="text-blue-500/20"
-      />
-    </svg>
-    {[...Array(20)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute rounded-full"
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        }}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{
-          scale: [0, 1, 0],
-          opacity: [0, 0.2, 0],
-          transition: {
-            duration: 4,
-            repeat: Infinity,
-            delay: i * 0.2,
-            ease: "easeInOut"
-          }
-        }}
+function GradientButton({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  const [rotation, setRotation] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation((prev) => (prev + 1) % 360);
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <MagneticButton>
+      <motion.a
+        href={href}
+        className="relative group"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
-        <div 
-          className={`w-2 h-2 rounded-full ${
-            Math.random() > 0.5 ? 'bg-blue-400/20' : 'bg-purple-400/20'
-          }`}
+        <div
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-600 via-blue-500 to-purple-500"
+          style={{ transform: `rotate(${rotation}deg)` }}
         />
-      </motion.div>
-    ))}
-  </div>
-);
+        <div className="absolute inset-[2px] rounded-full bg-black backdrop-blur-xl" />
+        <div className="relative flex items-center space-x-2 rounded-full px-6 py-3 text-sm font-medium">
+          <span className="relative z-10 flex items-center justify-center w-5 h-5">
+            {icon}
+          </span>
+          <span className="relative z-10">{label}</span>
+          <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-20 bg-gradient-to-r from-violet-600 via-blue-500 to-purple-500 transition-opacity duration-500" />
+        </div>
+      </motion.a>
+    </MagneticButton>
+  );
+}
 
 export default function Hero() {
   const { theme, toggleTheme } = useTheme();
@@ -108,13 +144,13 @@ export default function Hero() {
   if (!mounted) return null;
 
   return (
-    <div className={`relative min-h-screen transition-colors duration-500 ${
-      theme === 'dark' 
-        ? 'bg-gradient-to-br from-gray-900 to-gray-800' 
-        : 'bg-gradient-to-br from-blue-50 to-indigo-50'
-    }`}>
-      <BackgroundAnimation />
-
+    <div
+      className={`relative min-h-screen transition-colors duration-500 ${
+        theme === "dark"
+          ? "bg-[rgb(10, 10, 10)]"
+          : "bg-gradient-to-br from-blue-50 to-indigo-50"
+      }`}
+    >
       {/* Theme Toggle */}
       <AnimatePresence mode="wait">
         <motion.button
@@ -123,15 +159,15 @@ export default function Hero() {
           animate={{ opacity: 1, rotate: 0 }}
           exit={{ opacity: 0, rotate: 180 }}
           onClick={toggleTheme}
-          className={`fixed top-8 right-8 p-3 rounded-full ${
-            theme === 'dark'
-              ? 'bg-white/10 hover:bg-white/20'
-              : 'bg-gray-100 hover:bg-gray-200'
+          className={`fixed top-24 right-6 p-3 rounded-full ${
+            theme === "dark"
+              ? "bg-white/10 hover:bg-white/20"
+              : "bg-gray-100 hover:bg-gray-200"
           } transition-colors duration-300 z-50`}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          {theme === 'dark' ? (
+          {theme === "dark" ? (
             <Sun className="w-6 h-6 text-yellow-400" />
           ) : (
             <Moon className="w-6 h-6 text-gray-800" />
@@ -142,7 +178,7 @@ export default function Hero() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
+            {/* ------------------------------------------------------------ Left Content -------------------------------------------------------*/}
             <motion.div
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
@@ -150,26 +186,28 @@ export default function Hero() {
               className="space-y-8"
             >
               <div className="space-y-4">
-                <motion.h1 
+                <motion.h1
                   className="text-6xl sm:text-7xl lg:text-8xl font-bold"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
                   Hi, I am
-                  <motion.span 
-                    className={`block ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+                  <motion.span
+                    className={`block ${
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    }`}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
                   >
                     Shrinath
                   </motion.span>
-                  <motion.span 
+                  <motion.span
                     className={`block bg-clip-text text-transparent ${
-                      theme === 'dark'
-                        ? 'bg-gradient-to-r from-blue-400 to-purple-400'
-                        : 'bg-gradient-to-r from-blue-600 to-purple-600'
+                      theme === "dark"
+                        ? "inline-block bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-blue-500 to-purple-500 animate-gradient"
+                        : "bg-gradient-to-r from-blue-600 to-purple-600"
                     }`}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -178,46 +216,60 @@ export default function Hero() {
                     Software Developer
                   </motion.span>
                 </motion.h1>
-                <motion.p 
-                  className={`text-xl ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} max-w-2xl`}
+                <motion.p
+                  className={`text-xl ${
+                    theme === "dark" ? "text-gray-300" : "text-gray-600"
+                  } max-w-2xl`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 }}
                 >
-                  Software Developer with 1.5+ years of experience specializing in backend development, 
-                  API design, and database optimization.
+                  Software Developer with 1.5+ years of experience specializing
+                  in backend development, API design, and database optimization.
                 </motion.p>
               </div>
 
-              {/* Social Links */}
-              <div className="flex gap-6">
-                <SocialLink href="https://github.com/ShrinathSontakke" icon={Github} delay={1.0} />
-                <SocialLink href="https://www.linkedin.com/in/shrinath-sontakke/" icon={Linkedin} delay={1.2} />
-                <SocialLink href="mailto:shrisontakke88@gmail.com" icon={Instagram} delay={1.4} />
+              {/* -------------------------------------------------------------------------------------------------------------------- */}
+
+              <div className="text-center relative">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 360],
+                  }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-40 h-40 bg-gradient-to-r from-violet-600/20 via-blue-500/20 to-purple-500/20 rounded-full blur-3xl"
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="relative"
+                >
+                  {/* animation */}
+                  <div className="flex flex-wrap justify-center gap-6">
+                    {[
+                      { icon: <Code2 />, label: "Projects", href: "#projects" },
+                      { icon: <Github />, label: "GitHub", href: "#" },
+                      { icon: <Linkedin />, label: "LinkedIn", href: "#" },
+                      { icon: <Mail />, label: "Contact", href: "#contact" },
+                    ].map((item) => (
+                      <GradientButton
+                        key={item.label}
+                        icon={item.icon}
+                        label={item.label}
+                        href={item.href}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
               </div>
 
-              {/* Resume Button */}
-              <motion.a
-                href="/path-to-your-resume.pdf"
-                download
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.6 }}
-                className={`inline-block px-8 py-4 text-lg font-medium rounded-full ${
-                  theme === 'dark'
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
-                } transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: theme === 'dark'
-                    ? '0 0 30px rgba(147, 197, 253, 0.3)'
-                    : '0 0 30px rgba(37, 99, 235, 0.2)'
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Download Resume
-              </motion.a>
+              {/* -------------------------------------------------------------------------------------------------------------------- */}
             </motion.div>
 
             {/* Right Profile Image */}
@@ -237,14 +289,15 @@ export default function Hero() {
                   transition={{
                     duration: 4,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: "easeInOut",
                   }}
                 />
-                <img
+                <Lottie animationData={Coding} />
+                {/* <img
                   src="/your-profile-photo.jpg"
                   alt="Shrinath Sontakke"
                   className="relative z-10 w-full rounded-2xl shadow-2xl transform transition-transform duration-300 hover:scale-105"
-                />
+                /> */}
               </motion.div>
             </FloatingElement>
           </div>

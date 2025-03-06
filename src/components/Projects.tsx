@@ -1,31 +1,37 @@
-import { motion } from 'framer-motion';
-import { Github, Globe } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Github, Globe } from "lucide-react";
 
 const projects = [
   {
-    title: "E-Commerce Platform",
-    description: "A full-stack e-commerce solution with React and Node.js",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=800&q=80",
+    title: "Heart Failure Prediction",
+    description:
+      "Predicting the risk of heart failure to determine survival outcomes using machine learning algorithms.",
+    image:
+      "https://img.freepik.com/free-vector/high-cholesterol-blood-pressure-tiny-people-character-concept-vector-illustration_272375-2278.jpg",
     github: "#",
     demo: "#",
-    tags: ["React", "Node.js", "MongoDB"]
+    tags: ["Python", "Machine learning", "Scikit-learn"],
   },
   {
-    title: "AI Chat Application",
-    description: "Real-time chat app with AI-powered responses",
-    image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=800&q=80",
-    github: "#",
+    title: "Pratyaksha KYC Application",
+    description:
+      "Streamlining KYC verification with AI and OCR for secure, efficient, and seamless customer onboarding.",
+    image:
+      "https://img.freepik.com/free-vector/know-your-customer-concept-marketing-team-doing-research-collecting-client-surveys-analyzing-risks-business-group-using-laptops-documents-near-kyc-huge-letters_74855-13146.jpg",
+    github: "https://github.com/Pratyaksha-KYC/KYC_Application",
     demo: "#",
-    tags: ["Python", "TensorFlow", "WebSocket"]
+    tags: ["Python", "React", "MongoDB"],
   },
   {
-    title: "Portfolio Website",
-    description: "Modern portfolio with 3D animations and React",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    github: "#",
+    title: "Cricket Data Analytics",
+    description:
+      "Analyzing T20 World Cup data to craft the ultimate cricket team for an intergalactic showdown.",
+    image:
+      "https://img.freepik.com/free-vector/gradient-ipl-cricket-illustration_23-2149205212.jpg",
+    github: "https://github.com/ShrinathSontakke/Cricket-Data-Analytics",
     demo: "#",
-    tags: ["React", "Three.js", "Tailwind"]
-  }
+    tags: ["Python", "Pandas", "Power BI"],
+  },
 ];
 
 export default function Projects() {
@@ -38,8 +44,10 @@ export default function Projects() {
           viewport={{ once: true }}
           className="max-w-6xl mx-auto"
         >
-          <h2 className="text-4xl font-bold mb-12 text-center text-white">Featured Projects</h2>
-          
+          <h2 className="text-4xl font-bold mb-12 text-center text-white">
+            Featured Projects
+          </h2>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <motion.div
@@ -56,9 +64,11 @@ export default function Projects() {
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {project.title}
+                  </h3>
                   <p className="text-gray-300 mb-4">{project.description}</p>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tags.map((tag, i) => (
                       <span
@@ -69,7 +79,7 @@ export default function Projects() {
                       </span>
                     ))}
                   </div>
-                  
+
                   <div className="flex space-x-4">
                     <motion.a
                       whileHover={{ scale: 1.05 }}
@@ -84,8 +94,8 @@ export default function Projects() {
                       href={project.demo}
                       className="flex items-center space-x-2 text-white"
                     >
-                      <Globe className="h-5 w-5" />
-                      <span>Demo</span>
+                      {/* <Globe className="h-5 w-5" />
+                      <span>Demo</span> */}
                     </motion.a>
                   </div>
                 </div>

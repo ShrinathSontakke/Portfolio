@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,9 +14,9 @@ export default function Footer() {
             viewport={{ once: true }}
             className="text-white mb-4 md:mb-0"
           >
-            <p>&copy; {currentYear} Your Name. All rights reserved.</p>
+            <p>&copy; {currentYear} Shrinath Sontakke. All rights reserved.</p>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -24,14 +24,19 @@ export default function Footer() {
             className="flex space-x-4"
           >
             {[
-              { icon: <Github />, href: "#" },
-              { icon: <Linkedin />, href: "#" },
-              { icon: <Twitter />, href: "#" },
-              { icon: <Mail />, href: "mailto:your.email@example.com" }
+              { icon: <Github />, href: "https://github.com/ShrinathSontakke" },
+              {
+                icon: <Linkedin />,
+                href: "https://www.linkedin.com/in/shrinath-sontakke/",
+              },
+              { icon: <Twitter />, href: "https://x.com/SontakkeShri" },
+              { icon: <Mail />, href: "mailto:shrisontakke88@gmail.com" },
             ].map((social, index) => (
               <motion.a
                 key={index}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 className="text-white/80 hover:text-white transition-colors"
               >

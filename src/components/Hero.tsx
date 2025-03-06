@@ -9,7 +9,7 @@ import { Code2, Mail, Github, Linkedin, Moon, Sun } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { useState, useEffect } from "react";
 import Lottie from "lottie-react";
-import Coding from "../assets/coding.json";
+import Coding from "../../public/assets/Coding.json";
 
 const FloatingElement = ({
   children,

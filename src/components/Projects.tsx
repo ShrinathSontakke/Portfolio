@@ -8,7 +8,7 @@ const projects = [
       "Predicting the risk of heart failure to determine survival outcomes using machine learning algorithms.",
     image:
       "https://img.freepik.com/free-vector/high-cholesterol-blood-pressure-tiny-people-character-concept-vector-illustration_272375-2278.jpg",
-    github: "#",
+    github: "https://github.com/ShrinathSontakke/Heart-failure-prediction-ml",
     demo: "#",
     tags: ["Python", "Machine learning", "Scikit-learn"],
   },

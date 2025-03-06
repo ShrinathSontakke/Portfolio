@@ -254,8 +254,16 @@ export default function Hero() {
                   <div className="flex flex-wrap justify-center gap-6">
                     {[
                       { icon: <Code2 />, label: "Projects", href: "#projects" },
-                      { icon: <Github />, label: "GitHub", href: "#" },
-                      { icon: <Linkedin />, label: "LinkedIn", href: "#" },
+                      {
+                        icon: <Github />,
+                        label: "GitHub",
+                        href: "https://github.com/ShrinathSontakke",
+                      },
+                      {
+                        icon: <Linkedin />,
+                        label: "LinkedIn",
+                        href: "https://www.linkedin.com/in/shrinath-sontakke/",
+                      },
                       { icon: <Mail />, label: "Contact", href: "#contact" },
                     ].map((item) => (
                       <GradientButton

@@ -71,7 +71,7 @@ export default function Resume() {
               Resume
             </h2>
             <motion.a
-              href="/path-to-your-resume.pdf"
+              href="../../public/assets/General CV.pdf"
               download
               className={`flex items-center gap-2 px-6 py-3 rounded-full ${
                 theme === "dark"

@@ -8,11 +8,49 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  const [result, setResult] = useState<string>("");
+  interface FormData {
+    name: string;
+    email: string;
+    message: string;
+  }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+  interface ApiResponse {
+    success: boolean;
+    message: string;
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResult("Sending....");
+
+    const payload = {
+      access_key: "70a5979f-a203-4ac2-90af-11e61c4ea2ce",
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+    };
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data: ApiResponse = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        console.error("Error:", data);
+        setResult(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setResult("Something went wrong. Please try again later.");
+    }
   };
 
   return (
@@ -122,6 +160,8 @@ export default function Contact() {
                   required
                 />
               </div>
+
+              {result && <p className="text-white">{result}</p>}
 
               <motion.button
                 whileHover={{ scale: 1.05 }}

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Rocket, Star, Zap, Trophy } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import Shrinath from "../../public/assets/shrinath.png";
+import Shrinath from "../../public/assets/Shrianth1.png";
 
 export default function About() {
   const { theme } = useTheme();

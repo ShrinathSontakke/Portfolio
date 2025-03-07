@@ -7,6 +7,7 @@ import {
   Award,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import ResumePDF from "../../public/assets/General CV.pdf";
 
 export default function Resume() {
   const { theme } = useTheme();
@@ -71,7 +72,7 @@ export default function Resume() {
               Resume
             </h2>
             <motion.a
-              href="../../public/assets/General CV.pdf"
+              href={ResumePDF}
               download
               className={`flex items-center gap-2 px-6 py-3 rounded-full ${
                 theme === "dark"

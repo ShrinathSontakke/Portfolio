@@ -3,16 +3,6 @@ import { Github, Globe } from "lucide-react";
 
 const projects = [
   {
-    title: "Heart Failure Prediction",
-    description:
-      "Predicting the risk of heart failure to determine survival outcomes using machine learning algorithms.",
-    image:
-      "https://img.freepik.com/free-vector/high-cholesterol-blood-pressure-tiny-people-character-concept-vector-illustration_272375-2278.jpg",
-    github: "https://github.com/ShrinathSontakke/Heart-failure-prediction-ml",
-    demo: "#",
-    tags: ["Python", "Machine learning", "Scikit-learn"],
-  },
-  {
     title: "Pratyaksha KYC Application",
     description:
       "Streamlining KYC verification with AI and OCR for secure, efficient, and seamless customer onboarding.",
@@ -23,14 +13,24 @@ const projects = [
     tags: ["Python", "React", "MongoDB"],
   },
   {
-    title: "Cricket Data Analytics",
+    title: "Astrology Ai Agent",
     description:
-      "Analyzing T20 World Cup data to craft the ultimate cricket team for an intergalactic showdown.",
+      "Developed a personalized AI chat system that delivers Vedic insights in real time with engaging, user-friendly responses.",
     image:
-      "https://img.freepik.com/free-vector/gradient-ipl-cricket-illustration_23-2149205212.jpg",
-    github: "https://github.com/ShrinathSontakke/Cricket-Data-Analytics",
+      "https://img.freepik.com/free-vector/flat-woman-cha…ot-communicating-ai-robot-assistant_88138-959.jpg",
+    github: "https://github.com/Pratyaksha-KYC/KYC_Application",
+    demo: "https://astroyapper.com/",
+    tags: ["LLM", "Artificial Intelligence", "ML"],
+  },
+  {
+    title: "Heart Failure Prediction",
+    description:
+      "Predicting the risk of heart failure to determine survival outcomes using machine learning algorithms.",
+    image:
+      "https://img.freepik.com/free-vector/high-cholesterol-blood-pressure-tiny-people-character-concept-vector-illustration_272375-2278.jpg",
+    github: "https://github.com/ShrinathSontakke/Heart-failure-prediction-ml",
     demo: "#",
-    tags: ["Python", "Pandas", "Power BI"],
+    tags: ["Python", "Machine learning", "Scikit-learn"],
   },
 ];
 
@@ -89,14 +89,18 @@ export default function Projects() {
                       <Github className="h-5 w-5" />
                       <span>Code</span>
                     </motion.a>
-                    <motion.a
-                      whileHover={{ scale: 1.05 }}
-                      href={project.demo}
-                      className="flex items-center space-x-2 text-white"
-                    >
-                      {/* <Globe className="h-5 w-5" />
-                      <span>Demo</span> */}
-                    </motion.a>
+
+                    {project.title === "Astrology Ai Agent" && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+                      >
+                        <Globe className="h-5 w-5" />
+                        <span>Demo</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               </motion.div>

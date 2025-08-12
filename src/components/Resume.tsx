@@ -7,7 +7,7 @@ import {
   Award,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import ResumePDF from "../../public/assets/Shrinath_Sontakke_Resume.pdf";
+import ResumePDF from "../../public/assets/Shrinath_Resume.pdf";
 
 export default function Resume() {
   const { theme } = useTheme();
